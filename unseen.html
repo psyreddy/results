@@ -1,31 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.75">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Speech Enhancement - Unseen Noise</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: center;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-        }
-        img {
-            width: 300px; /* Adjust as needed */
-            height: auto;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-    <h2>Speech Enhancement Results</h2>
-    <p id="noiseClassLabel">Noise Class: <b>air conditioner</b> | Clean File: <b>f1_script4.wav</b> | Env: <b>unseen_noise</b></p>
-    <select id="cleanFileSelect"></select>
-    <select id="noiseClassSelect"></select>
-    <div id="tableContainer"></div>
+    <!-- Theme Toggle Switch -->
+    <div class="theme-toggle">
+        <div class="toggle-switch" onclick="toggleTheme()">
+            <div class="toggle-slider"></div>
+        </div>
+    </div>
+
+    <div class="container results-container">
+        <div>
+            <h2>Speech Enhancement Results</h2>
+            <p id="noiseClassLabel">Noise Class: <b>airport</b> | Clean File: <b>f1_script4.wav</b> | Env:
+                <b>unseen_noise</b>
+            </p>
+            <select id="cleanFileSelect"></select>
+            <select id="noiseClassSelect"></select>
+            <div id="tableContainer"></div>
+
+            <!-- Navigation Buttons -->
+            <div class="nav-buttons">
+                <a href="index.html" class="btn">← Back to Home</a>
+                <a href="seen.html" class="btn btn-primary">View Seen Noise Results →</a>
+            </div>
+        </div>
+    </div>
+
     <script>
         const snrValues = [-5, 0, 5];
         const cleanFiles = ['f1_script4.wav', 'f3_script2.wav', 'f8_script1.wav', 'f9_script2.wav', 'm10_script3.wav', 'm1_script3.wav', 'm2_script5.wav', 'm6_script2.wav', 'm7_script4.wav', 'm9_script2.wav'];
@@ -40,7 +48,7 @@
                 select.appendChild(option);
             });
         }
-        
+
         function populateNoiseSelect() {
             const select = document.getElementById("noiseClassSelect");
             select.innerHTML = "";
@@ -54,7 +62,7 @@
                 select.value = select.options[0].value;
             }
         }
-        
+
         function generateTable(noiseClass, selectedCleanFile) {
             const env = "unseen_noise";
             let tableHTML = `<table>
@@ -120,11 +128,25 @@
             const selectedNoise = document.getElementById("noiseClassSelect").value;
             const env = "unseen_noise";
             document.getElementById("tableContainer").innerHTML = generateTable(selectedNoise, selectedCleanFile);
-            document.getElementById("noiseClassLabel").innerHTML = 
+            document.getElementById("noiseClassLabel").innerHTML =
                 `Noise Class: <b>${selectedNoise.replace("_", " ")}</b> | Clean File: <b>${selectedCleanFile}</b> | Env: <b>${env}</b>`;
         }
 
-        window.onload = function() {
+        // Theme Toggle Functionality
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        });
+
+        window.onload = function () {
             populateCleanFileSelect();
             populateNoiseSelect();
             document.getElementById("cleanFileSelect").value = "f1_script4.wav";
@@ -134,4 +156,5 @@
         }
     </script>
 </body>
+
 </html>
